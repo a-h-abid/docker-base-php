@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-n-phpfpm
+  namespace: default
+  labels:
+    app: nginx-n-phpfpm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-n-phpfpm
+  template:
+    metadata:
+      labels:
+        app: nginx-n-phpfpm
+        version: v1
+    spec:
+      containers:
+        - name: nginx
+          image: docker.io/ahabid/base-php-nginx:1.19.3-0
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: NGINX_VHOST_UPSTREAM_PHPFPM_SERVICE_HOST_PORT
+            value: "127.0.0.1:9000"
+          ports:
+          - containerPort: 80
+          - containerPort: 443
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+        - name: phpfpm
+          image: docker.io/ahabid/base-php-phpfpm:7.4.11-0
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: PHP_INI_DISPLAY_ERRORS
+            value: "On"
+          - name: PHP_INI_OPCACHE_ENABLE
+            value: "0"
+          - name: PHPFPM_CONF_WWW_LISTEN_MODE
+            value: "0666"
+          ports:
+          - containerPort: 9000
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+

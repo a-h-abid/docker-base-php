@@ -1,0 +1,66 @@
+version: '3.7'
+
+services:
+
+  nginx:
+    image: ${DOCKER_IMAGE_NAME_NGINX}:${NGINX_VERSION}-${PATCH_NUMBER_NGINX}
+    build:
+      context: ${DOCKER_BUILD_CONTEXT_DIR}
+      dockerfile: nginx/Dockerfile
+      args:
+        - HTTP_PROXY=${APP_HTTP_PROXY}
+        - HTTPS_PROXY=${APP_HTTPS_PROXY}
+        - NO_PROXY=${APP_NO_PROXY}
+        - TIMEZONE=${TIMEZONE}
+        - NGINX_VERSION=${NGINX_VERSION}
+    env_file:
+      - .envs/nginx.env
+
+  phpfpm:
+    image: ${DOCKER_IMAGE_NAME_PHPFPM}:${PHP_VERSION}-${PATCH_NUMBER_PHPFPM}
+    build:
+      context: ${DOCKER_BUILD_CONTEXT_DIR}
+      dockerfile: phpfpm/Dockerfile
+      args:
+        - HTTP_PROXY=${APP_HTTP_PROXY}
+        - HTTPS_PROXY=${APP_HTTPS_PROXY}
+        - NO_PROXY=${APP_NO_PROXY}
+        - TIMEZONE=${TIMEZONE}
+        - PHP_VERSION=${PHP_VERSION}
+    env_file:
+      - .envs/php-ini.env
+      - .envs/php-fpm.env
+
+  nginx-phpfpm:
+    image: ${DOCKER_IMAGE_NAME_NGINX_PHPFPM}:n${NGINX_VERSION}-p${PHP_VERSION}-${PATCH_NUMBER_NGINX_PHPFPM}
+    build:
+      context: ${DOCKER_BUILD_CONTEXT_DIR}
+      dockerfile: nginx-phpfpm/Dockerfile
+      args:
+        - HTTP_PROXY=${APP_HTTP_PROXY}
+        - HTTPS_PROXY=${APP_HTTPS_PROXY}
+        - NO_PROXY=${APP_NO_PROXY}
+        - TIMEZONE=${TIMEZONE}
+        - PHP_VERSION=${PHP_VERSION}
+        - NGINX_VERSION=${NGINX_VERSION}
+    env_file:
+      - .envs/nginx.env
+      - .envs/php-ini.env
+      - .envs/php-fpm.env
+
+  apache-php:
+    image: ${DOCKER_IMAGE_NAME_APACHE_PHP}:${PHP_VERSION}-${PATCH_NUMBER_APACHE_PHP}
+    build:
+      context: ${DOCKER_BUILD_CONTEXT_DIR}
+      dockerfile: apache-php/Dockerfile
+      args:
+        - HTTP_PROXY=${APP_HTTP_PROXY}
+        - HTTPS_PROXY=${APP_HTTPS_PROXY}
+        - NO_PROXY=${APP_NO_PROXY}
+        - TIMEZONE=${TIMEZONE}
+        - PHP_VERSION=${PHP_VERSION}
+    env_file:
+      - .envs/apache.env
+      - .envs/php-ini.env
+      - .envs/php-fpm.env
+
