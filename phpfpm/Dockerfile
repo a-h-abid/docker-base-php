@@ -13,7 +13,7 @@ ENV http_proxy="${HTTP_PROXY}" \
     https_proxy="${HTTPS_PROXY}" \
     no_proxy="${NO_PROXY}" \
     TZ="${TIMEZONE}" \
-    COMPOSER_VERSION="1.10.15" \
+    COMPOSER_VERSION="2.0.8" \
     COMPOSER_HOME="/usr/local/composer"
 
 USER root
@@ -22,26 +22,6 @@ RUN echo "-- Configure Timezone --" \
         && echo "${TIMEZONE}" > /etc/timezone \
         && rm /etc/localtime \
         && dpkg-reconfigure -f noninteractive tzdata \
-    && echo "-- Install Dependencies --" \
-        && apt-get update -y \
-        && apt-get install -y --no-install-recommends \
-            curl \
-            g++ \
-            gettext \
-            libfreetype6-dev \
-            libgmp-dev \
-            libicu-dev \
-            libjpeg-dev \
-            libpng-dev \
-            libpq-dev \
-            libssl-dev \
-            libxml2-dev \
-            libz-dev \
-            libzip-dev \
-            openssl \
-            unzip \
-            zip \
-            zlib1g-dev \
     && echo "-- Install PHP Extensions --" \
         && curl -o /usr/local/bin/install-php-extensions https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions \
         && chmod a+x /usr/local/bin/install-php-extensions \
@@ -55,15 +35,7 @@ RUN echo "-- Configure Timezone --" \
            sockets \
            zip \
     && echo "-- Cleanup Junks --" \
-        && rm -f /usr/local/etc/php-fpm.d/zz-docker.conf | true \
-        && apt-get purge -y \
-            g++ \
-        && apt-get autoremove -y \
-        && apt-get clean -y \
-        && rm -rf \
-            /var/lib/apt/lists/* \
-            /tmp/* \
-            /var/tmp/*
+        && rm -f /usr/local/etc/php-fpm.d/zz-docker.conf | true
 
 # PHP Composer Installation & Directory Permissions
 RUN curl -L -o /usr/local/bin/composer https://github.com/composer/composer/releases/download/${COMPOSER_VERSION}/composer.phar \
@@ -73,8 +45,7 @@ RUN curl -L -o /usr/local/bin/composer https://github.com/composer/composer/rele
     && chmod -R ugo+w ${COMPOSER_HOME} \
     && chmod -R g+s ${COMPOSER_HOME} \
     && chmod ugo+x /usr/local/bin/composer \
-    && composer --version \
-    && composer global require --no-interaction hirak/prestissimo
+    && composer --version
 
 COPY --chown=root:root ./phpfpm/php.ini /usr/local/etc/php/conf.d/app-php.ini
 COPY --chown=root:root ./phpfpm/www.conf /usr/local/etc/php-fpm.d/www.conf
