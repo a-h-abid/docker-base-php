@@ -70,7 +70,7 @@ ENV APACHE_ENABLE_HTTP_TRAFFIC="true" \
     APACHE_VHOST_SSL_CERTIFICATE_KEY_FILE="/etc/ssl/certs/ssl-cert-snakeoil.key"
 
 # PHP INI Settings for production by default
-COPY --chown=root:root ./phpfpm/php.ini /usr/local/etc/php/conf.d/app-php.ini
+COPY --chown=root:root ./.commons/php/php.ini /usr/local/etc/php/conf.d/app-php.ini
 
 ENV PHP_INI_OUTPUT_BUFFERING=4096 \
     PHP_INI_MAX_EXECUTION_TIME=60 \

@@ -47,8 +47,8 @@ RUN curl -L -o /usr/local/bin/composer https://github.com/composer/composer/rele
     && chmod ugo+x /usr/local/bin/composer \
     && composer --version
 
-COPY --chown=root:root ./phpfpm/php.ini /usr/local/etc/php/conf.d/app-php.ini
-COPY --chown=root:root ./phpfpm/www.conf /usr/local/etc/php-fpm.d/www.conf
+COPY --chown=root:root ./.commons/php/php.ini /usr/local/etc/php/conf.d/app-php.ini
+COPY --chown=root:root ./.commons/php/www.conf /usr/local/etc/php-fpm.d/www.conf
 
 # PHP INI Settings for production by default
 ENV PHP_INI_OUTPUT_BUFFERING=4096 \
