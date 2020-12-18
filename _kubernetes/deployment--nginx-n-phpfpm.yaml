@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: docker.io/ahabid/base-php-nginx:1.19.3-0
+          image: docker.io/ahabid/base-php-nginx:1.19.6-0
           imagePullPolicy: IfNotPresent
           env:
           - name: NGINX_VHOST_UPSTREAM_PHPFPM_SERVICE_HOST_PORT
@@ -34,7 +34,7 @@ spec:
               cpu: "200m"
               memory: "128Mi"
         - name: phpfpm
-          image: docker.io/ahabid/base-php-phpfpm:7.4.11-0
+          image: docker.io/ahabid/base-php-phpfpm:7.4.13-0
           imagePullPolicy: IfNotPresent
           env:
           - name: PHP_INI_DISPLAY_ERRORS
