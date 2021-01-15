@@ -23,7 +23,7 @@ RUN echo "-- Configure Timezone --" \
         && rm /etc/localtime \
         && dpkg-reconfigure -f noninteractive tzdata \
     && echo "-- Install PHP Extensions --" \
-        && curl -o /usr/local/bin/install-php-extensions https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions \
+        && curl -L -o /usr/local/bin/install-php-extensions https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
         && chmod a+x /usr/local/bin/install-php-extensions \
         && sync \
         && install-php-extensions \
