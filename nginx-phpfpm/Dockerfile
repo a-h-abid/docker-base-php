@@ -56,7 +56,7 @@ RUN echo "-- Configure Timezone --" \
         && apt install --no-install-recommends --no-install-suggests -y \
             nginx="${NGINX_VERSION}"-1~$(lsb_release -sc) \
     && echo "-- Install PHP Extensions --" \
-        && curl -o /usr/local/bin/install-php-extensions https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions \
+        && curl -L -o /usr/local/bin/install-php-extensions https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
         && chmod a+x /usr/local/bin/install-php-extensions \
         && sync \
         && install-php-extensions \
@@ -77,11 +77,11 @@ RUN echo "-- Configure Timezone --" \
 
 # PHP Composer Installation & Directory Permissions
 RUN curl -L -o /usr/local/bin/composer https://github.com/composer/composer/releases/download/${COMPOSER_VERSION}/composer.phar \
-    && mkdir -p ${COMPOSER_HOME} \
+    && mkdir -p ${COMPOSER_HOME}/cache \
     && mkdir /run/php \
     && chown -R www-data:www-data ${COMPOSER_HOME} /run/php \
     && chmod -R ugo+w ${COMPOSER_HOME} \
-    && chmod -R g+s ${COMPOSER_HOME} \
+    && chmod -R ug+s ${COMPOSER_HOME} \
     && chmod ugo+x /usr/local/bin/composer \
     && composer --version
 
