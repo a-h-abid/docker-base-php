@@ -27,13 +27,13 @@ RUN echo "-- Configure Timezone --" \
         && chmod a+x /usr/local/bin/install-php-extensions \
         && sync \
         && install-php-extensions \
-           exif \
-           intl \
-           opcache \
-           pcntl \
-           pdo_mysql \
-           sockets \
-           zip \
+            exif \
+            intl \
+            opcache \
+            pcntl \
+            pdo_mysql \
+            sockets \
+            zip \
     && echo "--- Setting Up Apache ---" \
         && echo "\nServerName localhost\n" >> /etc/apache2/apache2.conf \
         && echo "ServerTokens Prod\n" >> /etc/apache2/apache2.conf \

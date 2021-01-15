@@ -27,13 +27,13 @@ RUN echo "-- Configure Timezone --" \
         && chmod a+x /usr/local/bin/install-php-extensions \
         && sync \
         && install-php-extensions \
-           exif \
-           intl \
-           opcache \
-           pcntl \
-           pdo_mysql \
-           sockets \
-           zip \
+            exif \
+            intl \
+            opcache \
+            pcntl \
+            pdo_mysql \
+            sockets \
+            zip \
     && echo "-- Cleanup Junks --" \
         && rm -f /usr/local/etc/php-fpm.d/zz-docker.conf | true
 
