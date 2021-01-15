@@ -33,17 +33,23 @@ ENV NGINX_CONF_USER="www-data www-data" \
     NGINX_VHOST_USE_ECHO="false" \
     NGINX_VHOST_USE_MINIO="false"
 
-COPY --chown=root:root ./.commons/certs/* /etc/ssl/certs/
+# Add Nginx Configs
 COPY --chown=root:root ./nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --chown=root:root ./nginx/conf.d/*.conf /etc/nginx/conf.d/
 COPY --chown=root:root ./nginx/includes/*.conf /etc/nginx/includes/
-COPY --chown=root:root ./nginx/entrypoint.sh /usr/local/bin/entrypoint.sh
+
+# Add Certs
+COPY --chown=root:root ./.commons/certs/* /etc/ssl/certs/
+
+# Remove the Additional Entrypoints that comes with the image
+RUN rm -rf /docker-entrypoint.d/*.sh
+
+# Add our own Additional Entrypoints
+COPY --chown=root:root ./nginx/docker-entrypoint.d/*.sh /docker-entrypoint.d/
 
 WORKDIR /var/www/html
 
-RUN chmod ug+x /usr/local/bin/entrypoint.sh \
+RUN chmod ugo+x /docker-entrypoint.d/*.sh \
     && chown -R www-data:www-data /var/www
-
-ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 
 CMD ["nginx"]
