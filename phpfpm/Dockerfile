@@ -13,7 +13,7 @@ ENV http_proxy="${HTTP_PROXY}" \
     https_proxy="${HTTPS_PROXY}" \
     no_proxy="${NO_PROXY}" \
     TZ="${TIMEZONE}" \
-    COMPOSER_VERSION="2.0.8" \
+    COMPOSER_VERSION="2.0.11" \
     COMPOSER_HOME="/usr/local/composer"
 
 USER root
@@ -69,6 +69,7 @@ ENV PHP_INI_OUTPUT_BUFFERING=4096 \
     PHP_INI_MAX_FILE_UPLOADS="2" \
     PHP_INI_ALLOW_URL_FOPEN="On" \
     PHP_INI_DATE_TIMEZONE="${TIMEZONE}" \
+    PHP_INI_ERROR_LOG="" \
     PHP_INI_SESSION_SAVE_HANDLER="files" \
     PHP_INI_SESSION_SAVE_PATH="/tmp" \
     PHP_INI_SESSION_USE_STRICT_MODE=0 \
