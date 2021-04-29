@@ -1,4 +1,4 @@
-ARG PHP_VERSION="7.4.13"
+ARG PHP_VERSION="8.0.3"
 
 FROM php:${PHP_VERSION}-fpm
 
@@ -13,7 +13,7 @@ ENV http_proxy="${HTTP_PROXY}" \
     https_proxy="${HTTPS_PROXY}" \
     no_proxy="${NO_PROXY}" \
     TZ="${TIMEZONE}" \
-    COMPOSER_VERSION="2.0.11" \
+    COMPOSER_VERSION="2.0.13" \
     COMPOSER_HOME="/usr/local/composer"
 
 USER root

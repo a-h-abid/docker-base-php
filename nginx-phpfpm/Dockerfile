@@ -1,10 +1,10 @@
-ARG PHP_VERSION="7.4.13"
+ARG PHP_VERSION="8.0.3"
 
 FROM php:${PHP_VERSION}-fpm
 
 LABEL maintainer="Ahmedul Haque Abid <a_h_abid@hotmail.com>"
 
-ARG NGINX_VERSION="1.19.6"
+ARG NGINX_VERSION="1.19.8"
 
 ARG HTTP_PROXY=""
 ARG HTTPS_PROXY=""
@@ -16,7 +16,7 @@ ENV http_proxy="${HTTP_PROXY}" \
     no_proxy="${NO_PROXY}" \
     TZ="${TIMEZONE}" \
     NGINX_VERSION="${NGINX_VERSION}" \
-    COMPOSER_VERSION="2.0.11" \
+    COMPOSER_VERSION="2.0.13" \
     COMPOSER_HOME="/usr/local/composer"
 
 USER root
