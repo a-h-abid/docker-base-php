@@ -1,3 +1,5 @@
+# syntax = docker/dockerfile:1
+
 ARG PHP_VERSION="8.0.5"
 
 FROM php:${PHP_VERSION}-fpm
@@ -21,9 +23,8 @@ ENV http_proxy="${HTTP_PROXY}" \
 
 USER root
 
-
 # S6 Overlay Setup Configuration
-ADD https://github.com/just-containers/s6-overlay/releases/download/v2.1.0.2/s6-overlay-aarch64-installer /tmp/s6-overlay-installer
+ADD https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-aarch64-installer /tmp/s6-overlay-installer
 
 RUN chmod +x /tmp/s6-overlay-installer && /tmp/s6-overlay-installer /
 
@@ -33,7 +34,8 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
     S6_KILL_FINISH_MAXTIME="5000"
 
 ## Install Nginx + PHP Extensions
-RUN echo "-- Configure Timezone --" \
+RUN --mount=type=cache,target=/var/cache/apt \
+    echo "-- Configure Timezone --" \
         && echo "${TIMEZONE}" > /etc/timezone \
         && rm /etc/localtime \
         && dpkg-reconfigure -f noninteractive tzdata \
@@ -41,6 +43,7 @@ RUN echo "-- Configure Timezone --" \
         && apt update \
         && apt install -y --no-install-recommends --no-install-suggests \
             apt-transport-https \
+            bc \
             ca-certificates \
             curl \
             gnupg1 \

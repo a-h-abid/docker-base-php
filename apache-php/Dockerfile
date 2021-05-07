@@ -1,3 +1,5 @@
+# syntax = docker/dockerfile:1
+
 ARG PHP_VERSION="8.0.5"
 
 FROM php:${PHP_VERSION}-apache
@@ -18,13 +20,15 @@ ENV http_proxy="${HTTP_PROXY}" \
 
 USER root
 
-RUN echo "-- Configure Timezone --" \
+RUN --mount=type=cache,target=/var/cache/apt \
+    echo "-- Configure Timezone --" \
         && echo "${TIMEZONE}" > /etc/timezone \
         && rm /etc/localtime \
         && dpkg-reconfigure -f noninteractive tzdata \
     && echo "-- Install APT Dependencies --" \
         && apt update \
-        && apt install -V -y \
+        && apt install -V -y --no-install-recommends --no-install-suggests \
+            bc \
             curl \
             zip \
             unzip \
