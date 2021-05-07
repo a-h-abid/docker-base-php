@@ -128,9 +128,10 @@ RUN chmod ug+x /usr/local/bin/entrypoint.sh \
     && chown -R www-data:www-data /var/www
 
 # Unset proxy, timezone ENVs
-RUN unset http_proxy \
-    && unset https_proxy \
-    && unset no_proxy
+ENV http_proxy="" \
+    https_proxy="" \
+    no_proxy="" \
+    TZ=""
 
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 

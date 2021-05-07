@@ -189,9 +189,10 @@ RUN chown -R www-data:www-data /var/www \
     && sed -i '/set \$upstreamName/d' /etc/nginx/includes/loc-phpfpm.conf
 
 # Unset proxy, timezone ENVs
-RUN unset http_proxy \
-    && unset https_proxy \
-    && unset no_proxy
+ENV http_proxy="" \
+    https_proxy="" \
+    no_proxy="" \
+    TZ=""
 
 STOPSIGNAL SIGTERM
 

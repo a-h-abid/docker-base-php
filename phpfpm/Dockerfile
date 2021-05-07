@@ -120,8 +120,9 @@ WORKDIR /var/www/html
 RUN chown -R www-data:www-data /var/www
 
 # Unset proxy, timezone ENVs
-RUN unset http_proxy \
-    && unset https_proxy \
-    && unset no_proxy
+ENV http_proxy="" \
+    https_proxy="" \
+    no_proxy="" \
+    TZ=""
 
 CMD [ "php-fpm" ]
