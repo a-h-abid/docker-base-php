@@ -1,10 +1,12 @@
 # syntax = docker/dockerfile:1
 
-ARG PHP_VERSION="8.0.5"
+ARG PHP_VERSION="8.0.10"
 
 FROM php:${PHP_VERSION}-apache
 
 LABEL maintainer="Ahmedul Haque Abid <a_h_abid@hotmail.com>"
+
+ARG COMPOSER_VERSION="2.1.6"
 
 ARG HTTP_PROXY=""
 ARG HTTPS_PROXY=""
@@ -15,7 +17,7 @@ ENV http_proxy="${HTTP_PROXY}" \
     https_proxy="${HTTPS_PROXY}" \
     no_proxy="${NO_PROXY}" \
     TZ="${TIMEZONE}" \
-    COMPOSER_VERSION="2.0.13" \
+    COMPOSER_VERSION="${COMPOSER_VERSION}" \
     COMPOSER_HOME="/usr/local/composer"
 
 USER root

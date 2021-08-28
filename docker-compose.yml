@@ -25,6 +25,7 @@ services:
         - NO_PROXY=${APP_NO_PROXY}
         - TIMEZONE=${TIMEZONE}
         - PHP_VERSION=${PHP_VERSION}
+        - COMPOSER_VERSION=${COMPOSER_VERSION}
     env_file:
       - .envs/php-ini.env
       - .envs/php-fpm.env
@@ -41,6 +42,7 @@ services:
         - TIMEZONE=${TIMEZONE}
         - PHP_VERSION=${PHP_VERSION}
         - NGINX_VERSION=${NGINX_VERSION}
+        - COMPOSER_VERSION=${COMPOSER_VERSION}
     env_file:
       - .envs/nginx.env
       - .envs/php-ini.env
@@ -57,6 +59,7 @@ services:
         - NO_PROXY=${APP_NO_PROXY}
         - TIMEZONE=${TIMEZONE}
         - PHP_VERSION=${PHP_VERSION}
+        - COMPOSER_VERSION=${COMPOSER_VERSION}
     env_file:
       - .envs/apache.env
       - .envs/php-ini.env
