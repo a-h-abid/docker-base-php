@@ -25,7 +25,7 @@ ENV http_proxy="${HTTP_PROXY}" \
 USER root
 
 # S6 Overlay Setup Configuration
-ADD https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-aarch64-installer /tmp/s6-overlay-installer
+ADD https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-amd64-installer /tmp/s6-overlay-installer
 
 RUN chmod +x /tmp/s6-overlay-installer && /tmp/s6-overlay-installer /
 
