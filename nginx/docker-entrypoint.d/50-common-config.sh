@@ -55,6 +55,10 @@ if [ "${NGINX_VHOST_ENABLE_REDIRECT_FROM_TO}" = "false" ]; then
     fi
 fi
 
+if [ "${NGINX_VHOST_USE_PHPFPM}" = "false" ]; then
+    rm -f /etc/nginx/includes/loc-phpfpm.conf
+fi
+
 if [ "${NGINX_VHOST_USE_ECHO}" = "false" ]; then
     rm -f /etc/nginx/includes/loc-echo.conf
 fi

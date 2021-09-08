@@ -32,6 +32,7 @@ ENV NGINX_CONF_USER="www-data www-data" \
     NGINX_VHOST_UPSTREAM_MINIO_SERVICE_HOST_PORT="minio:9000" \
     NGINX_VHOST_SSL_CERTIFICATE="/etc/ssl/certs/ssl-cert-snakeoil.pem" \
     NGINX_VHOST_SSL_CERTIFICATE_KEY="/etc/ssl/certs/ssl-cert-snakeoil.key" \
+    NGINX_VHOST_USE_PHPFPM="true" \
     NGINX_VHOST_USE_ECHO="false" \
     NGINX_VHOST_USE_MINIO="false"
 
