@@ -44,6 +44,7 @@ services:
         - NGINX_VERSION=${NGINX_VERSION}
         - COMPOSER_VERSION=${COMPOSER_VERSION}
     env_file:
+      - .envs/s6-overlay.env
       - .envs/nginx.env
       - .envs/php-ini.env
       - .envs/php-fpm.env
