@@ -77,7 +77,9 @@ RUN --mount=type=cache,target=/var/cache/apt \
         && apt purge -y --auto-remove lsb-release \
         && apt clean \
         && apt autoremove \
-        && rm -rf /var/lib/apt/lists/*
+        && rm -rf /var/lib/apt/lists/* \
+    && echo "-- Additional Works --" \
+        && mkdir /docker-entrypoint.nginx.d
 
 # PHP Composer Installation & Directory Permissions
 RUN curl -L -o /usr/local/bin/composer https://github.com/composer/composer/releases/download/${COMPOSER_VERSION}/composer.phar \
@@ -96,6 +98,8 @@ COPY --chown=root:root ./.commons/certs/* /etc/ssl/certs/
 COPY --chown=root:root ./nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --chown=root:root ./nginx/conf.d/*.conf /etc/nginx/conf.d/
 COPY --chown=root:root ./nginx/includes/*.conf /etc/nginx/includes/
+
+COPY --chown=root:root ./nginx/docker-entrypoint.d/*.sh /docker-entrypoint.nginx.d/
 
 # Copy service script
 COPY ./nginx-phpfpm/start-nginx.sh /etc/services.d/nginx/run
@@ -182,12 +186,14 @@ ENV NGINX_CONF_USER="www-data www-data" \
     NGINX_VHOST_UPSTREAM_MINIO_SERVICE_HOST_PORT="minio:9000" \
     NGINX_VHOST_SSL_CERTIFICATE="/etc/ssl/certs/ssl-cert-snakeoil.pem" \
     NGINX_VHOST_SSL_CERTIFICATE_KEY="/etc/ssl/certs/ssl-cert-snakeoil.key" \
+    NGINX_VHOST_USE_PHPFPM="true" \
     NGINX_VHOST_USE_ECHO="false" \
     NGINX_VHOST_USE_MINIO="false"
 
 WORKDIR /var/www/html
 
-RUN chown -R www-data:www-data /var/www \
+RUN chmod ugo+x /docker-entrypoint.nginx.d/*.sh \
+    && chown -R www-data:www-data /var/www \
     && chmod 755 /etc/services.d/nginx/run \
     && chmod 755 /etc/services.d/php_fpm/run \
     && sed -i '/resolver \${NGINX_VHOST_DNS_RESOLVER_IP}/d' /etc/nginx/includes/loc-phpfpm.conf \

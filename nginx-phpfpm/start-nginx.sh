@@ -1,66 +1,28 @@
 #!/usr/bin/with-contenv bash
 set -e;
 
-## CONF
+if /usr/bin/find "/docker-entrypoint.nginx.d/" -mindepth 1 -maxdepth 1 -type f -print -quit 2>/dev/null | read v; then
+    echo "[nginx] /docker-entrypoint.nginx.d/ is not empty, will attempt to perform configuration"
 
-sed -i "s!\${NGINX_CONF_USER}!${NGINX_CONF_USER}!" /etc/nginx/nginx.conf
-sed -i "s!\${NGINX_CONF_WORKER_PROCESSES}!${NGINX_CONF_WORKER_PROCESSES}!" /etc/nginx/nginx.conf
-sed -i "s!\${NGINX_CONF_EVENTS_WORKER_CONNECTIONS}!${NGINX_CONF_EVENTS_WORKER_CONNECTIONS}!" /etc/nginx/nginx.conf
-sed -i "s!\${NGINX_CONF_HTTP_KEEPALIVE_TIMEOUT}!${NGINX_CONF_HTTP_KEEPALIVE_TIMEOUT}!" /etc/nginx/nginx.conf
-sed -i "s!\${NGINX_CONF_HTTP_GZIP_COMP_LEVEL}!${NGINX_CONF_HTTP_GZIP_COMP_LEVEL}!" /etc/nginx/nginx.conf
-sed -i "s!\${NGINX_CONF_HTTP_CLIENT_MAX_BODY_SIZE}!${NGINX_CONF_HTTP_CLIENT_MAX_BODY_SIZE}!" /etc/nginx/nginx.conf
+    echo "[nginx] Looking for shell scripts in /docker-entrypoint.nginx.d/"
+    find "/docker-entrypoint.nginx.d/" -follow -type f -print | sort -V | while read -r f; do
+        case "$f" in
+            *.sh)
+                if [ -x "$f" ]; then
+                    echo "[nginx] Launching $f";
+                    "$f"
+                else
+                    # warn on shell scripts without exec bit
+                    echo "[nginx] Ignoring $f, not executable";
+                fi
+                ;;
+            *) echo "[nginx] Ignoring $f";;
+        esac
+    done
 
-## VHOST
-
-sed -i "s!\${NGINX_VHOST_HTTP_LISTEN_PORT}!${NGINX_VHOST_HTTP_LISTEN_PORT}!" /etc/nginx/conf.d/*
-sed -i "s!\${NGINX_VHOST_HTTPS_LISTEN_PORT}!${NGINX_VHOST_HTTPS_LISTEN_PORT}!" /etc/nginx/conf.d/*
-sed -i "s!\${NGINX_VHOST_HTTP_SERVER_NAME}!${NGINX_VHOST_HTTP_SERVER_NAME}!" /etc/nginx/conf.d/*
-sed -i "s!\${NGINX_VHOST_HTTPS_SERVER_NAME}!${NGINX_VHOST_HTTPS_SERVER_NAME}!" /etc/nginx/conf.d/*
-sed -i "s!\${NGINX_VHOST_DOCUMENT_ROOT}!${NGINX_VHOST_DOCUMENT_ROOT}!" /etc/nginx/conf.d/*
-sed -i "s!\${NGINX_VHOST_REDIRECT_FROM_SERVER_NAME}!${NGINX_VHOST_REDIRECT_FROM_SERVER_NAME}!" /etc/nginx/conf.d/*
-sed -i "s!\${NGINX_VHOST_REDIRECT_TO_PROTOCOL}!${NGINX_VHOST_REDIRECT_TO_PROTOCOL}!" /etc/nginx/conf.d/*
-sed -i "s!\${NGINX_VHOST_REDIRECT_TO_SERVER_NAME}!${NGINX_VHOST_REDIRECT_TO_SERVER_NAME}!" /etc/nginx/conf.d/*
-
-sed -i "s!\${NGINX_VHOST_SSL_CERTIFICATE}!${NGINX_VHOST_SSL_CERTIFICATE}!" /etc/nginx/includes/ssl-params.conf
-sed -i "s!\${NGINX_VHOST_SSL_CERTIFICATE_KEY}!${NGINX_VHOST_SSL_CERTIFICATE_KEY}!" /etc/nginx/includes/ssl-params.conf
-
-sed -i "s!\${NGINX_VHOST_DNS_RESOLVER_IP}!${NGINX_VHOST_DNS_RESOLVER_IP}!" /etc/nginx/includes/loc-*.conf
-
-sed -i "s!\${NGINX_VHOST_UPSTREAM_PHPFPM_SERVICE_HOST_PORT}!${NGINX_VHOST_UPSTREAM_PHPFPM_SERVICE_HOST_PORT}!" /etc/nginx/includes/loc-phpfpm.conf
-sed -i "s!\${NGINX_VHOST_UPSTREAM_PHPFPM_FASTCGI_READ_TIMEOUT}!${NGINX_VHOST_UPSTREAM_PHPFPM_FASTCGI_READ_TIMEOUT}!" /etc/nginx/includes/loc-phpfpm.conf
-sed -i "s!\${NGINX_VHOST_UPSTREAM_PHPFPM_FASTCGI_PASS}!${NGINX_VHOST_UPSTREAM_PHPFPM_FASTCGI_PASS}!" /etc/nginx/includes/loc-phpfpm.conf
-
-sed -i "s!\${NGINX_VHOST_UPSTREAM_ECHO_SERVICE_HOST_PORT}!${NGINX_VHOST_UPSTREAM_ECHO_SERVICE_HOST_PORT}!" /etc/nginx/includes/loc-echo.conf
-sed -i "s!\${NGINX_VHOST_UPSTREAM_MINIO_SERVICE_HOST_PORT}!${NGINX_VHOST_UPSTREAM_MINIO_SERVICE_HOST_PORT}!" /etc/nginx/includes/loc-minio.conf
-
-if [ "${NGINX_VHOST_ENABLE_HTTP_TRAFFIC}" = "false" ]; then
-    rm -f /etc/nginx/conf.d/default.conf
-fi
-
-if [ "${NGINX_VHOST_ENABLE_HTTPS_TRAFFIC}" = "false" ]; then
-    rm -f /etc/nginx/conf.d/default-ssl.conf
-fi
-
-if [ "${NGINX_VHOST_ENABLE_REDIRECT_HTTP_TO_HTTPS}" = "false" ]; then
-    rm -f /etc/nginx/conf.d/redirect-http-https.conf
-fi
-
-if [ "${NGINX_VHOST_ENABLE_REDIRECT_FROM_TO}" = "false" ]; then
-    if [ "${NGINX_VHOST_ENABLE_HTTP_TRAFFIC}" = "false" ]; then
-        rm -f /etc/nginx/conf.d/redirect-from-to-http.conf
-    fi
-
-    if [ "${NGINX_VHOST_ENABLE_HTTPS_TRAFFIC}" = "false" ]; then
-        rm -f /etc/nginx/conf.d/redirect-from-to-https.conf
-    fi
-fi
-
-if [ "${NGINX_VHOST_USE_ECHO}" = "false" ]; then
-    rm -f /etc/nginx/includes/loc-echo.conf
-fi
-
-if [ "${NGINX_VHOST_USE_MINIO}" = "false" ]; then
-    rm -f /etc/nginx/includes/loc-minio.conf
+    echo "[nginx] Configuration complete; ready for start up"
+else
+    echo "[nginx] No files found in /docker-entrypoint.nginx.d/, skipping configuration"
 fi
 
 /usr/sbin/nginx
