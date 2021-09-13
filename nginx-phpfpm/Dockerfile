@@ -207,6 +207,6 @@ ENV http_proxy="" \
 
 STOPSIGNAL SIGTERM
 
-ENTRYPOINT ["/init"]
+ENTRYPOINT []
 
-CMD []
+CMD ["/init"]
