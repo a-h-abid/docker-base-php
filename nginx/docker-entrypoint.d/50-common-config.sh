@@ -7,6 +7,7 @@ sed -i "s!\${NGINX_CONF_USER}!${NGINX_CONF_USER}!" /etc/nginx/nginx.conf
 sed -i "s!\${NGINX_CONF_WORKER_PROCESSES}!${NGINX_CONF_WORKER_PROCESSES}!" /etc/nginx/nginx.conf
 sed -i "s!\${NGINX_CONF_EVENTS_WORKER_CONNECTIONS}!${NGINX_CONF_EVENTS_WORKER_CONNECTIONS}!" /etc/nginx/nginx.conf
 sed -i "s!\${NGINX_CONF_HTTP_KEEPALIVE_TIMEOUT}!${NGINX_CONF_HTTP_KEEPALIVE_TIMEOUT}!" /etc/nginx/nginx.conf
+sed -i "s!\${NGINX_CONF_HTTP_GZIP_STATIC}!${NGINX_CONF_HTTP_GZIP_STATIC}!" /etc/nginx/nginx.conf
 sed -i "s!\${NGINX_CONF_HTTP_GZIP_COMP_LEVEL}!${NGINX_CONF_HTTP_GZIP_COMP_LEVEL}!" /etc/nginx/nginx.conf
 sed -i "s!\${NGINX_CONF_HTTP_CLIENT_MAX_BODY_SIZE}!${NGINX_CONF_HTTP_CLIENT_MAX_BODY_SIZE}!" /etc/nginx/nginx.conf
 

@@ -6,7 +6,7 @@ FROM php:${PHP_VERSION}-apache
 
 LABEL maintainer="Ahmedul Haque Abid <a_h_abid@hotmail.com>"
 
-ARG COMPOSER_VERSION="2.1.6"
+ARG COMPOSER_VERSION="2.1.8"
 
 ARG HTTP_PROXY=""
 ARG HTTPS_PROXY=""
