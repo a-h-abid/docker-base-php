@@ -1,12 +1,12 @@
 # syntax = docker/dockerfile:1
 
-ARG PHP_VERSION="8.0.10"
+ARG PHP_VERSION="8.0.13"
 
 FROM php:${PHP_VERSION}-apache
 
 LABEL maintainer="Ahmedul Haque Abid <a_h_abid@hotmail.com>"
 
-ARG COMPOSER_VERSION="2.1.8"
+ARG COMPOSER_VERSION="2.1.14"
 
 ARG HTTP_PROXY=""
 ARG HTTPS_PROXY=""

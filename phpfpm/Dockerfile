@@ -1,12 +1,12 @@
 # syntax = docker/dockerfile:1
 
-ARG PHP_VERSION="8.0.10"
+ARG PHP_VERSION="8.0.13"
 
 FROM php:${PHP_VERSION}-fpm
 
 LABEL maintainer="Ahmedul Haque Abid <a_h_abid@hotmail.com>"
 
-ARG COMPOSER_VERSION="2.1.8"
+ARG COMPOSER_VERSION="2.1.14"
 
 ARG HTTP_PROXY=""
 ARG HTTPS_PROXY=""
@@ -29,7 +29,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
         && dpkg-reconfigure -f noninteractive tzdata \
     && echo "-- Install APT Dependencies --" \
         && apt update \
-        && apt install -Vy --no-install-recommends --no-install-suggests \
+        && apt install -V -y --no-install-recommends --no-install-suggests \
             bc \
             curl \
             zip \
