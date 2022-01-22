@@ -24,7 +24,6 @@ sed -i "s!\${NGINX_VHOST_REDIRECT_TO_SERVER_NAME}!${NGINX_VHOST_REDIRECT_TO_SERV
 
 sed -i "s!\${NGINX_VHOST_SSL_CERTIFICATE}!${NGINX_VHOST_SSL_CERTIFICATE}!" /etc/nginx/includes/ssl-params.conf
 sed -i "s!\${NGINX_VHOST_SSL_CERTIFICATE_KEY}!${NGINX_VHOST_SSL_CERTIFICATE_KEY}!" /etc/nginx/includes/ssl-params.conf
-sed -i "s!\${NGINX_VHOST_SSL_HEADER_X_FRAME_OPTIONS}!${NGINX_VHOST_SSL_HEADER_X_FRAME_OPTIONS}!" /etc/nginx/includes/ssl-params.conf
 
 sed -i "s!\${NGINX_VHOST_DNS_RESOLVER_IP}!${NGINX_VHOST_DNS_RESOLVER_IP}!" /etc/nginx/includes/loc-*.conf
 
