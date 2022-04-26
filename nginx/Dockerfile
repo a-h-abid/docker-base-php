@@ -1,10 +1,16 @@
-ARG NGINX_VERSION="1.21.4"
+ARG NGINX_VERSION="1.21.6"
 
 FROM nginx:${NGINX_VERSION}
 
 LABEL maintainer="Ahmedul Haque Abid <a_h_abid@hotmail.com>"
 
 ENV TZ="UTC"
+
+USER root
+
+RUN apt update \
+    && apt list --upgradable \
+    && apt upgrade -y
 
 ENV NGINX_CONF_USER="www-data www-data" \
     NGINX_CONF_WORKER_PROCESSES="4" \
@@ -54,6 +60,7 @@ COPY --chown=root:root ./nginx/docker-entrypoint.d/*.sh /docker-entrypoint.d/
 WORKDIR /var/www/html
 
 RUN chmod ugo+x /docker-entrypoint.d/*.sh \
-    && chown -R www-data:www-data /var/www
+    && chown -R www-data:www-data /var/www \
+    && chmod -R ugo+w /etc/nginx/nginx.conf /etc/nginx/conf.d/ /etc/nginx/includes/
 
 CMD ["nginx"]

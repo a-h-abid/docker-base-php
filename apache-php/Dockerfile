@@ -2,11 +2,11 @@
 
 ARG PHP_VERSION="8.0.13"
 
-FROM php:${PHP_VERSION}-apache
+FROM php:${PHP_VERSION}-apache as base
 
 LABEL maintainer="Ahmedul Haque Abid <a_h_abid@hotmail.com>"
 
-ARG COMPOSER_VERSION="2.1.14"
+ARG COMPOSER_VERSION="2.3.5"
 
 ARG HTTP_PROXY=""
 ARG HTTPS_PROXY=""
@@ -29,6 +29,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
         && dpkg-reconfigure -f noninteractive tzdata \
     && echo "-- Install APT Dependencies --" \
         && apt update \
+        && apt list --upgradable \
+        && apt upgrade -y \
         && apt install -V -y --no-install-recommends --no-install-suggests \
             bc \
             curl \

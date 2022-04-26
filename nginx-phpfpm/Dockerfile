@@ -6,8 +6,8 @@ FROM php:${PHP_VERSION}-fpm
 
 LABEL maintainer="Ahmedul Haque Abid <a_h_abid@hotmail.com>"
 
-ARG NGINX_VERSION="1.21.4"
-ARG COMPOSER_VERSION="2.1.14"
+ARG NGINX_VERSION="1.21.6"
+ARG COMPOSER_VERSION="2.3.5"
 
 ARG HTTP_PROXY=""
 ARG HTTPS_PROXY=""
@@ -42,6 +42,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
         && dpkg-reconfigure -f noninteractive tzdata \
     && echo "-- Install Dependencies --" \
         && apt update \
+        && apt list --upgradable \
+        && apt upgrade -y \
         && apt install -V -y --no-install-recommends --no-install-suggests \
             apt-transport-https \
             bc \
@@ -75,8 +77,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
         && rm -f /usr/local/etc/php-fpm.d/zz-docker.conf | true \
         && rm -f /tmp/nginx_signing.key \
         && apt purge -y --auto-remove lsb-release \
-        && apt clean \
-        && apt autoremove \
+        && apt clean -y \
+        && apt autoremove -y \
         && rm -rf /var/lib/apt/lists/* \
     && echo "-- Additional Works --" \
         && mkdir /docker-entrypoint.nginx.d
@@ -195,6 +197,7 @@ WORKDIR /var/www/html
 
 RUN chmod ugo+x /docker-entrypoint.nginx.d/*.sh \
     && chown -R www-data:www-data /var/www \
+    && chmod -R ugo+w /etc/nginx/nginx.conf /etc/nginx/conf.d/ /etc/nginx/includes/ \
     && chmod 755 /etc/services.d/nginx/run \
     && chmod 755 /etc/services.d/php_fpm/run \
     && sed -i '/resolver \${NGINX_VHOST_DNS_RESOLVER_IP}/d' /etc/nginx/includes/loc-phpfpm.conf \
