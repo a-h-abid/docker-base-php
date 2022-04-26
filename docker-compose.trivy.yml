@@ -1,0 +1,16 @@
+volumes:
+  trivy-cache:
+    name: trivy-cache
+
+services:
+
+  trivy:
+    image: aquasec/trivy:0.26.0
+    volumes:
+      - trivy-cache:/root/.cache
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - image
+      - --no-progress
+      - --ignore-unfixed
+      - ${TRIVY_SCAN_IMAGE_NAME}
