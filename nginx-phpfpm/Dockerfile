@@ -25,9 +25,8 @@ ENV http_proxy="${HTTP_PROXY}" \
 USER root
 
 # S6 Overlay Setup Configuration
-COPY https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-amd64-installer /tmp/s6-overlay-installer
-
-RUN chmod +x /tmp/s6-overlay-installer && /tmp/s6-overlay-installer /
+RUN curl -o /tmp/s6-overlay-installer https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-amd64-installer \
+    && chmod +x /tmp/s6-overlay-installer && /tmp/s6-overlay-installer /
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
     S6_SERVICES_GRACETIME="3000" \
