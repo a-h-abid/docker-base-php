@@ -214,3 +214,5 @@ STOPSIGNAL SIGTERM
 ENTRYPOINT []
 
 CMD ["/init"]
+
+USER www-data

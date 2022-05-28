@@ -130,3 +130,5 @@ ENV http_proxy="" \
     TZ=""
 
 CMD [ "php-fpm" ]
+
+USER www-data

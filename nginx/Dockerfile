@@ -64,3 +64,5 @@ RUN chmod ugo+x /docker-entrypoint.d/*.sh \
     && chmod -R ugo+w /etc/nginx/nginx.conf /etc/nginx/conf.d/ /etc/nginx/includes/
 
 CMD ["nginx"]
+
+USER www-data

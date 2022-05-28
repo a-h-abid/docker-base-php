@@ -140,3 +140,5 @@ ENV http_proxy="" \
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 
 CMD ["apache2-foreground"]
+
+USER www-data
