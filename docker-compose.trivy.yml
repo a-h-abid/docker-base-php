@@ -2,15 +2,35 @@ volumes:
   trivy-cache:
     name: trivy-cache
 
+x-trivy-extend:
+  &trivy-extend
+  image: aquasec/trivy:0.28.1
+  volumes:
+    - trivy-cache:/root/.cache
+    - /var/run/docker.sock:/var/run/docker.sock
+    - .:/app
+  working_dir: /app
+
 services:
 
-  trivy:
-    image: aquasec/trivy:0.26.0
-    volumes:
-      - trivy-cache:/root/.cache
-      - /var/run/docker.sock:/var/run/docker.sock
+  trivy-image:
+    << : *trivy-extend
     command:
       - image
+      - --skip-dirs=/etc/ssl/certs/
       - --no-progress
       - --ignore-unfixed
       - ${TRIVY_SCAN_IMAGE_NAME}
+
+  trivy-fs:
+    << : *trivy-extend
+    command:
+      - fs
+      - --skip-dirs=/app/.commons/certs/
+      - /app
+
+  trivy-conf:
+    << : *trivy-extend
+    command:
+      - conf
+      - /app
