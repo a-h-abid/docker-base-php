@@ -12,7 +12,8 @@ RUN apt update \
     && apt list --upgradable \
     && apt upgrade -y
 
-ENV NGINX_CONF_USER="www-data www-data" \
+ENV NGINX_MODIFY_CONFIGS="true" \
+    NGINX_CONF_USER="www-data www-data" \
     NGINX_CONF_WORKER_PROCESSES="4" \
     NGINX_CONF_EVENTS_WORKER_CONNECTIONS="2048" \
     NGINX_CONF_HTTP_KEEPALIVE_TIMEOUT="15s" \
