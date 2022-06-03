@@ -1,13 +1,13 @@
-# syntax = docker/dockerfile:1
+# syntax=docker/dockerfile:1.3
 
-ARG PHP_VERSION="8.0.13"
+ARG PHP_VERSION="8.1.16"
 
 FROM php:${PHP_VERSION}-fpm
 
 LABEL maintainer="Ahmedul Haque Abid <a_h_abid@hotmail.com>"
 
 ARG NGINX_VERSION="1.21.6"
-ARG COMPOSER_VERSION="2.3.5"
+ARG COMPOSER_VERSION="2.3.6"
 
 ARG HTTP_PROXY=""
 ARG HTTPS_PROXY=""
@@ -34,7 +34,7 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
     S6_KILL_FINISH_MAXTIME="5000"
 
 ## Install Nginx + PHP Extensions
-RUN --mount=type=cache,target=/var/cache/apt \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     echo "-- Configure Timezone --" \
         && echo "${TIMEZONE}" > /etc/timezone \
         && rm /etc/localtime \
@@ -78,7 +78,6 @@ RUN --mount=type=cache,target=/var/cache/apt \
         && apt purge -y --auto-remove lsb-release \
         && apt clean -y \
         && apt autoremove -y \
-        && rm -rf /var/lib/apt/lists/* \
     && echo "-- Additional Works --" \
         && mkdir /docker-entrypoint.nginx.d
 
@@ -96,11 +95,11 @@ COPY --chown=root:root ./.commons/php/php.ini /usr/local/etc/php/conf.d/app-php.
 COPY --chown=root:root ./.commons/php/www.conf /usr/local/etc/php-fpm.d/www.conf
 
 COPY --chown=root:root ./.commons/certs/* /etc/ssl/certs/
-COPY --chown=root:root ./nginx/nginx.conf /etc/nginx/nginx.conf
-COPY --chown=root:root ./nginx/conf.d/*.conf /etc/nginx/conf.d/
-COPY --chown=root:root ./nginx/includes/*.conf /etc/nginx/includes/
+COPY --chown=www-data:www-data ./nginx/nginx.conf /etc/nginx/nginx.conf
+COPY --chown=www-data:www-data ./nginx/conf.d/*.conf /etc/nginx/conf.d/
+COPY --chown=www-data:www-data ./nginx/includes/*.conf /etc/nginx/includes/
 
-COPY --chown=root:root ./nginx/docker-entrypoint.d/*.sh /docker-entrypoint.nginx.d/
+COPY --chown=www-data:www-data ./nginx/docker-entrypoint.d/*.sh /docker-entrypoint.nginx.d/
 
 # Copy service script
 COPY ./nginx-phpfpm/start-nginx.sh /etc/services.d/nginx/run
@@ -199,8 +198,8 @@ ENV NGINX_MODIFY_CONFIGS="true" \
 WORKDIR /var/www/html
 
 RUN chmod ugo+x /docker-entrypoint.nginx.d/*.sh \
-    && chown -R www-data:www-data /var/www \
-    && chmod -R ugo+w /etc/nginx/nginx.conf /etc/nginx/conf.d/ /etc/nginx/includes/ \
+    && touch /var/run/nginx.pid \
+    && chown -R www-data:www-data /var/www /etc/nginx/ /run/nginx.pid /var/cache/nginx /var/log/nginx \
     && chmod 755 /etc/services.d/nginx/run \
     && chmod 755 /etc/services.d/php_fpm/run \
     && sed -i '/resolver \${NGINX_VHOST_DNS_RESOLVER_IP}/d' /etc/nginx/includes/loc-phpfpm.conf \

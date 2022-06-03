@@ -1,12 +1,12 @@
-# syntax = docker/dockerfile:1
+# syntax=docker/dockerfile:1.3
 
-ARG PHP_VERSION="8.0.13"
+ARG PHP_VERSION="8.1.16"
 
 FROM php:${PHP_VERSION}-fpm
 
 LABEL maintainer="Ahmedul Haque Abid <a_h_abid@hotmail.com>"
 
-ARG COMPOSER_VERSION="2.3.5"
+ARG COMPOSER_VERSION="2.3.6"
 
 ARG HTTP_PROXY=""
 ARG HTTPS_PROXY=""
@@ -22,7 +22,7 @@ ENV http_proxy="${HTTP_PROXY}" \
 
 USER root
 
-RUN --mount=type=cache,target=/var/cache/apt \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     echo "-- Configure Timezone --" \
         && echo "${TIMEZONE}" > /etc/timezone \
         && rm /etc/localtime \
@@ -49,6 +49,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
             sockets \
             zip \
     && echo "-- Cleanup Junks --" \
+        && apt autoremove -y \
         && rm -f /usr/local/etc/php-fpm.d/zz-docker.conf | true
 
 # PHP Composer Installation & Directory Permissions

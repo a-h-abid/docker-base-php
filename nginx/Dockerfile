@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1.3
+
 ARG NGINX_VERSION="1.21.6"
 
 FROM nginx:${NGINX_VERSION}
@@ -8,9 +10,11 @@ ENV TZ="UTC"
 
 USER root
 
-RUN apt update \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    apt update \
     && apt list --upgradable \
-    && apt upgrade -y
+    && apt upgrade -y \
+    && apt autoremove -y
 
 ENV NGINX_MODIFY_CONFIGS="true" \
     NGINX_CONF_USER="www-data www-data" \
