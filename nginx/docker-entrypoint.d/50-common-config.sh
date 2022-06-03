@@ -35,8 +35,9 @@ if [ "${NGINX_MODIFY_CONFIGS}" = "true" ]; then
     sed -i "s!\${NGINX_VHOST_UPSTREAM_PHPFPM_FASTCGI_READ_TIMEOUT}!${NGINX_VHOST_UPSTREAM_PHPFPM_FASTCGI_READ_TIMEOUT}!" /etc/nginx/includes/loc-phpfpm.conf
     sed -i "s!\${NGINX_VHOST_UPSTREAM_PHPFPM_FASTCGI_PASS}!${NGINX_VHOST_UPSTREAM_PHPFPM_FASTCGI_PASS}!" /etc/nginx/includes/loc-phpfpm.conf
 
+    sed -i "s!\${NGINX_VHOST_UPSTREAM_PROXYAPP_KEEPALIVE}!${NGINX_VHOST_UPSTREAM_PROXYAPP_KEEPALIVE}!" /etc/nginx/conf.d/upstream.conf
     sed -i "s!\${NGINX_VHOST_UPSTREAM_PROXYAPP_PROTOCOL}!${NGINX_VHOST_UPSTREAM_PROXYAPP_PROTOCOL}!" /etc/nginx/includes/loc-proxyapp.conf
-    sed -i "s!\${NGINX_VHOST_UPSTREAM_PROXYAPP_HOST_PORT}!${NGINX_VHOST_UPSTREAM_PROXYAPP_HOST_PORT}!" /etc/nginx/includes/loc-proxyapp.conf
+    sed -i "s!\${NGINX_VHOST_UPSTREAM_PROXYAPP_HOST_PORT}!${NGINX_VHOST_UPSTREAM_PROXYAPP_HOST_PORT}!" /etc/nginx/includes/loc-proxyapp.conf /etc/nginx/conf.d/upstream.conf
     sed -i "s!\${NGINX_VHOST_UPSTREAM_PROXYAPP_PROXY_PASS}!${NGINX_VHOST_UPSTREAM_PROXYAPP_PROXY_PASS}!" /etc/nginx/includes/loc-proxyapp.conf
     sed -i "s!\${NGINX_VHOST_UPSTREAM_PROXYAPP_PROXY_HEADER_X_FORWARDED_HOST}!${NGINX_VHOST_UPSTREAM_PROXYAPP_PROXY_HEADER_X_FORWARDED_HOST}!" /etc/nginx/includes/loc-proxyapp.conf
     sed -i "s!\${NGINX_VHOST_UPSTREAM_PROXYAPP_PROXY_HEADER_X_FORWARDED_PROTO}!${NGINX_VHOST_UPSTREAM_PROXYAPP_PROXY_HEADER_X_FORWARDED_PROTO}!" /etc/nginx/includes/loc-proxyapp.conf
@@ -66,6 +67,10 @@ if [ "${NGINX_MODIFY_CONFIGS}" = "true" ]; then
         if [ "${NGINX_VHOST_ENABLE_HTTPS_TRAFFIC}" = "false" ] && [ -f "/etc/nginx/conf.d/redirect-from-to-https.conf" ]; then
             rm -f /etc/nginx/conf.d/redirect-from-to-https.conf
         fi
+    fi
+
+    if [ "${NGINX_VHOST_HTTP_USE_UPSTREAM_FILE}" = "false" ] && [ -f "/etc/nginx/conf.d/upstream.conf" ]; then
+        rm -f /etc/nginx/conf.d/upstream.conf
     fi
 
     if [ "${NGINX_VHOST_USE_PHPFPM}" = "false" ] && [ -f "/etc/nginx/includes/loc-phpfpm.conf" ]; then
