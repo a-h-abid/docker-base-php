@@ -35,6 +35,13 @@ if [ "${NGINX_MODIFY_CONFIGS}" = "true" ]; then
     sed -i "s!\${NGINX_VHOST_UPSTREAM_PHPFPM_FASTCGI_READ_TIMEOUT}!${NGINX_VHOST_UPSTREAM_PHPFPM_FASTCGI_READ_TIMEOUT}!" /etc/nginx/includes/loc-phpfpm.conf
     sed -i "s!\${NGINX_VHOST_UPSTREAM_PHPFPM_FASTCGI_PASS}!${NGINX_VHOST_UPSTREAM_PHPFPM_FASTCGI_PASS}!" /etc/nginx/includes/loc-phpfpm.conf
 
+    sed -i "s!\${NGINX_VHOST_UPSTREAM_PROXYAPP_PROTOCOL}!${NGINX_VHOST_UPSTREAM_PROXYAPP_PROTOCOL}!" /etc/nginx/includes/loc-proxyapp.conf
+    sed -i "s!\${NGINX_VHOST_UPSTREAM_PROXYAPP_HOST_PORT}!${NGINX_VHOST_UPSTREAM_PROXYAPP_HOST_PORT}!" /etc/nginx/includes/loc-proxyapp.conf
+    sed -i "s!\${NGINX_VHOST_UPSTREAM_PROXYAPP_PROXY_PASS}!${NGINX_VHOST_UPSTREAM_PROXYAPP_PROXY_PASS}!" /etc/nginx/includes/loc-proxyapp.conf
+    sed -i "s!\${NGINX_VHOST_UPSTREAM_PROXYAPP_PROXY_HEADER_X_FORWARDED_HOST}!${NGINX_VHOST_UPSTREAM_PROXYAPP_PROXY_HEADER_X_FORWARDED_HOST}!" /etc/nginx/includes/loc-proxyapp.conf
+    sed -i "s!\${NGINX_VHOST_UPSTREAM_PROXYAPP_PROXY_HEADER_X_FORWARDED_PROTO}!${NGINX_VHOST_UPSTREAM_PROXYAPP_PROXY_HEADER_X_FORWARDED_PROTO}!" /etc/nginx/includes/loc-proxyapp.conf
+    sed -i "s!\${NGINX_VHOST_UPSTREAM_PROXYAPP_PROXY_HEADER_CONNECTION}!${NGINX_VHOST_UPSTREAM_PROXYAPP_PROXY_HEADER_CONNECTION}!" /etc/nginx/includes/loc-proxyapp.conf
+
     sed -i "s!\${NGINX_VHOST_UPSTREAM_ECHO_SERVICE_HOST_PORT}!${NGINX_VHOST_UPSTREAM_ECHO_SERVICE_HOST_PORT}!" /etc/nginx/includes/loc-echo.conf
     sed -i "s!\${NGINX_VHOST_UPSTREAM_MINIO_SERVICE_HOST_PORT}!${NGINX_VHOST_UPSTREAM_MINIO_SERVICE_HOST_PORT}!" /etc/nginx/includes/loc-minio.conf
 
@@ -63,6 +70,10 @@ if [ "${NGINX_MODIFY_CONFIGS}" = "true" ]; then
 
     if [ "${NGINX_VHOST_USE_PHPFPM}" = "false" ] && [ -f "/etc/nginx/includes/loc-phpfpm.conf" ]; then
         rm -f /etc/nginx/includes/loc-phpfpm.conf
+    fi
+
+    if [ "${NGINX_VHOST_USE_PROXYAPP}" = "false" ] && [ -f "/etc/nginx/includes/loc-proxyapp.conf" ]; then
+        rm -f /etc/nginx/includes/loc-proxyapp.conf
     fi
 
     if [ "${NGINX_VHOST_USE_ECHO}" = "false" ] && [ -f "/etc/nginx/includes/loc-echo.conf" ]; then
