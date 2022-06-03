@@ -34,36 +34,36 @@ sed -i "s!\${NGINX_VHOST_UPSTREAM_PHPFPM_FASTCGI_PASS}!${NGINX_VHOST_UPSTREAM_PH
 sed -i "s!\${NGINX_VHOST_UPSTREAM_ECHO_SERVICE_HOST_PORT}!${NGINX_VHOST_UPSTREAM_ECHO_SERVICE_HOST_PORT}!" /etc/nginx/includes/loc-echo.conf
 sed -i "s!\${NGINX_VHOST_UPSTREAM_MINIO_SERVICE_HOST_PORT}!${NGINX_VHOST_UPSTREAM_MINIO_SERVICE_HOST_PORT}!" /etc/nginx/includes/loc-minio.conf
 
-if [ "${NGINX_VHOST_ENABLE_HTTP_TRAFFIC}" = "false" ]; then
+if [ "${NGINX_VHOST_ENABLE_HTTP_TRAFFIC}" = "false" ] && [ -f "/etc/nginx/conf.d/default.conf" ]; then
     rm -f /etc/nginx/conf.d/default.conf
 fi
 
-if [ "${NGINX_VHOST_ENABLE_HTTPS_TRAFFIC}" = "false" ]; then
+if [ "${NGINX_VHOST_ENABLE_HTTPS_TRAFFIC}" = "false" ] && [ -f "/etc/nginx/conf.d/default-ssl.conf" ]; then
     rm -f /etc/nginx/conf.d/default-ssl.conf
 fi
 
-if [ "${NGINX_VHOST_ENABLE_REDIRECT_HTTP_TO_HTTPS}" = "false" ]; then
+if [ "${NGINX_VHOST_ENABLE_REDIRECT_HTTP_TO_HTTPS}" = "false" ] && [ -f "/etc/nginx/conf.d/redirect-http-https.conf" ]; then
     rm -f /etc/nginx/conf.d/redirect-http-https.conf
 fi
 
 if [ "${NGINX_VHOST_ENABLE_REDIRECT_FROM_TO}" = "false" ]; then
-    if [ "${NGINX_VHOST_ENABLE_HTTP_TRAFFIC}" = "false" ]; then
+    if [ "${NGINX_VHOST_ENABLE_HTTP_TRAFFIC}" = "false" ] && [ -f "/etc/nginx/conf.d/redirect-from-to-http.conf" ]; then
         rm -f /etc/nginx/conf.d/redirect-from-to-http.conf
     fi
 
-    if [ "${NGINX_VHOST_ENABLE_HTTPS_TRAFFIC}" = "false" ]; then
+    if [ "${NGINX_VHOST_ENABLE_HTTPS_TRAFFIC}" = "false" ] && [ -f "/etc/nginx/conf.d/redirect-from-to-https.conf" ]; then
         rm -f /etc/nginx/conf.d/redirect-from-to-https.conf
     fi
 fi
 
-if [ "${NGINX_VHOST_USE_PHPFPM}" = "false" ]; then
+if [ "${NGINX_VHOST_USE_PHPFPM}" = "false" ] && [ -f "/etc/nginx/includes/loc-phpfpm.conf" ]; then
     rm -f /etc/nginx/includes/loc-phpfpm.conf
 fi
 
-if [ "${NGINX_VHOST_USE_ECHO}" = "false" ]; then
+if [ "${NGINX_VHOST_USE_ECHO}" = "false" ] && [ -f "/etc/nginx/includes/loc-echo.conf" ]; then
     rm -f /etc/nginx/includes/loc-echo.conf
 fi
 
-if [ "${NGINX_VHOST_USE_MINIO}" = "false" ]; then
+if [ "${NGINX_VHOST_USE_MINIO}" = "false" ] && [ -f "/etc/nginx/includes/loc-minio.conf"]; then
     rm -f /etc/nginx/includes/loc-minio.conf
 fi
