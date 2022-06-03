@@ -85,7 +85,7 @@ if [ "${NGINX_MODIFY_CONFIGS}" = "true" ]; then
         rm -f /etc/nginx/includes/loc-echo.conf
     fi
 
-    if [ "${NGINX_VHOST_USE_MINIO}" = "false" ] && [ -f "/etc/nginx/includes/loc-minio.conf"]; then
+    if [ "${NGINX_VHOST_USE_MINIO}" = "false" ] && [ -f "/etc/nginx/includes/loc-minio.conf" ]; then
         rm -f /etc/nginx/includes/loc-minio.conf
     fi
 
