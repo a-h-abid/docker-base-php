@@ -10,6 +10,7 @@ if [ "${NGINX_MODIFY_CONFIGS}" = "true" ]; then
     sed -i "s!\${NGINX_CONF_HTTP_KEEPALIVE_TIMEOUT}!${NGINX_CONF_HTTP_KEEPALIVE_TIMEOUT}!" /etc/nginx/nginx.conf
     sed -i "s!\${NGINX_CONF_HTTP_LOG_NOT_FOUND}!${NGINX_CONF_HTTP_LOG_NOT_FOUND}!" /etc/nginx/nginx.conf
     sed -i "s!\${NGINX_CONF_HTTP_GZIP_STATIC}!${NGINX_CONF_HTTP_GZIP_STATIC}!" /etc/nginx/nginx.conf
+    sed -i "s!\${NGINX_CONF_HTTP_GZIP_MIN_LENGTH}!${NGINX_CONF_HTTP_GZIP_MIN_LENGTH}!" /etc/nginx/nginx.conf
     sed -i "s!\${NGINX_CONF_HTTP_GZIP_COMP_LEVEL}!${NGINX_CONF_HTTP_GZIP_COMP_LEVEL}!" /etc/nginx/nginx.conf
     sed -i "s!\${NGINX_CONF_HTTP_CLIENT_MAX_BODY_SIZE}!${NGINX_CONF_HTTP_CLIENT_MAX_BODY_SIZE}!" /etc/nginx/nginx.conf
 
