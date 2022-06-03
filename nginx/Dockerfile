@@ -57,24 +57,24 @@ ENV NGINX_MODIFY_CONFIGS="true" \
     NGINX_VHOST_USE_MINIO="false"
 
 # Add Nginx Configs
-COPY --chown=root:root ./nginx/nginx.conf /etc/nginx/nginx.conf
-COPY --chown=root:root ./nginx/conf.d/*.conf /etc/nginx/conf.d/
-COPY --chown=root:root ./nginx/includes/*.conf /etc/nginx/includes/
+COPY --chown=www-data:www-data ./nginx/nginx.conf /etc/nginx/nginx.conf
+COPY --chown=www-data:www-data ./nginx/conf.d/*.conf /etc/nginx/conf.d/
+COPY --chown=www-data:www-data ./nginx/includes/*.conf /etc/nginx/includes/
 
 # Add Certs
-COPY --chown=root:root ./.commons/certs/* /etc/ssl/certs/
+COPY --chown=www-data:www-data ./.commons/certs/* /etc/ssl/certs/
 
 # Remove the Additional Entrypoints that comes with the image
 RUN rm -rf /docker-entrypoint.d/*.sh
 
 # Add our own Additional Entrypoints
-COPY --chown=root:root ./nginx/docker-entrypoint.d/*.sh /docker-entrypoint.d/
+COPY --chown=www-data:www-data ./nginx/docker-entrypoint.d/*.sh /docker-entrypoint.d/
 
 WORKDIR /var/www/html
 
 RUN chmod ugo+x /docker-entrypoint.d/*.sh \
-    && chown -R www-data:www-data /var/www \
-    && chmod -R ugo+w /etc/nginx/nginx.conf /etc/nginx/conf.d/ /etc/nginx/includes/
+    && touch /var/run/nginx.pid \
+    && chown -R www-data:www-data /var/www /etc/nginx/ /run/nginx.pid /var/cache/nginx /var/log/nginx
 
 CMD ["nginx"]
 
