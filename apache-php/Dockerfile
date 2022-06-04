@@ -48,12 +48,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
             pdo_mysql \
             sockets \
             zip \
-    && echo "--- Setting Up Apache ---" \
-        && echo "\nServerName localhost\n" >> /etc/apache2/apache2.conf \
-        && echo "ServerTokens Prod\n" >> /etc/apache2/apache2.conf \
-        && echo "ServerSignature Off\n" >> /etc/apache2/apache2.conf \
-        && a2enmod rewrite ssl \
-        && a2ensite default-ssl \
     && echo "-- Cleanup Junks --" \
         && apt autoremove -y
 
@@ -72,14 +66,15 @@ COPY ./.commons/certs/* /etc/ssl/certs/
 COPY --chown=root:root ./apache-php/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 # Apache Settings
-COPY ./apache-php/default.conf /etc/apache2/sites-available/000-default.conf
-COPY ./apache-php/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
+COPY ./apache-php/apache2/* /etc/apache2/
 
 ENV APACHE_ENABLE_HTTP_TRAFFIC="true" \
     APACHE_ENABLE_HTTPS_TRAFFIC="false" \
     APACHE_VHOST_SERVER_ADMIN="webmaster@example.com" \
     APACHE_VHOST_SERVER_NAME="_" \
     APACHE_VHOST_DOCUMENT_ROOT="/var/www/html" \
+    APACHE_VHOST_HTTP_PORT="8080" \
+    APACHE_VHOST_HTTPS_PORT="8443" \
     APACHE_VHOST_SSL_CERTIFICATE_FILE="/etc/ssl/certs/ssl-cert-snakeoil.pem" \
     APACHE_VHOST_SSL_CERTIFICATE_KEY_FILE="/etc/ssl/certs/ssl-cert-snakeoil.key"
 
@@ -129,7 +124,9 @@ ENV PHP_INI_OUTPUT_BUFFERING=4096 \
 WORKDIR /var/www/html
 
 RUN chmod ugo+x /usr/local/bin/entrypoint.sh \
-    && chown -R www-data:www-data /var/www /etc/apache2/sites-available/*.conf
+    && a2enmod rewrite ssl \
+    && a2ensite default-ssl \
+    && chown -R www-data:www-data /var/www /etc/apache2/
 
 # Unset proxy, timezone ENVs
 ENV http_proxy="" \
