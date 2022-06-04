@@ -128,8 +128,8 @@ ENV PHP_INI_OUTPUT_BUFFERING=4096 \
 
 WORKDIR /var/www/html
 
-RUN chmod ug+x /usr/local/bin/entrypoint.sh \
-    && chown -R www-data:www-data /var/www
+RUN chmod ugo+x /usr/local/bin/entrypoint.sh \
+    && chown -R www-data:www-data /var/www /etc/apache2/sites-available/*.conf
 
 # Unset proxy, timezone ENVs
 ENV http_proxy="" \
