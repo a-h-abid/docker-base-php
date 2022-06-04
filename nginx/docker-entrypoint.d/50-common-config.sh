@@ -86,12 +86,20 @@ if [ "${NGINX_MODIFY_CONFIGS}" = "true" ]; then
         rm -f /etc/nginx/conf.d/redirect-http-https.conf
     fi
 
-    if [ "${NGINX_VHOST_ENABLE_REDIRECT_FROM_TO}" = "false" ]; then
+    if [ "${NGINX_VHOST_ENABLE_REDIRECT_FROM_TO}" = "true" ]; then
         if [ "${NGINX_VHOST_ENABLE_HTTP_TRAFFIC}" = "false" ] && [ -f "/etc/nginx/conf.d/redirect-from-to-http.conf" ]; then
             rm -f /etc/nginx/conf.d/redirect-from-to-http.conf
         fi
 
         if [ "${NGINX_VHOST_ENABLE_HTTPS_TRAFFIC}" = "false" ] && [ -f "/etc/nginx/conf.d/redirect-from-to-https.conf" ]; then
+            rm -f /etc/nginx/conf.d/redirect-from-to-https.conf
+        fi
+    elif [ "${NGINX_VHOST_ENABLE_REDIRECT_FROM_TO}" = "false" ]; then
+        if [ -f "/etc/nginx/conf.d/redirect-from-to-http.conf" ]; then
+            rm -f /etc/nginx/conf.d/redirect-from-to-http.conf
+        fi
+
+        if [ -f "/etc/nginx/conf.d/redirect-from-to-https.conf" ]; then
             rm -f /etc/nginx/conf.d/redirect-from-to-https.conf
         fi
     fi
