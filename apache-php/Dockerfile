@@ -66,7 +66,7 @@ COPY ./.commons/certs/* /etc/ssl/certs/
 COPY --chown=root:root ./apache-php/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 # Apache Settings
-COPY ./apache-php/apache2/* /etc/apache2/
+COPY ./apache-php/apache2/ /etc/apache2/
 
 ENV APACHE_ENABLE_HTTP_TRAFFIC="true" \
     APACHE_ENABLE_HTTPS_TRAFFIC="false" \
@@ -124,7 +124,7 @@ ENV PHP_INI_OUTPUT_BUFFERING=4096 \
 WORKDIR /var/www/html
 
 RUN chmod ugo+x /usr/local/bin/entrypoint.sh \
-    && a2enmod rewrite ssl \
+    && a2enmod rewrite ssl headers \
     && a2ensite default-ssl \
     && chown -R www-data:www-data /var/www /etc/apache2/
 
